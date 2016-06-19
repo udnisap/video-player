@@ -1,0 +1,251 @@
+<!-- flowplayer depends on jQuery 1.7.1+ (for now) -->
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<!-- include flowplayer -->
+<script src="scripts/flowplayer.js"></script>
+
+<div class="row">
+  <div id="player" class="col-lg-10" style="width: 100%; height: 500px;">
+  </div>
+</div>
+<hr/>
+
+
+<tabset justified="true">
+  <tab heading="Video">
+    <h2>Video Options</h2>
+
+    <div class="alert alert-warning">Changing these settings will rebuffer the video from the start.</div>
+    <form class="form-horizontal">
+      <div class="form-group"
+           popover="This is the link to the video. Open this and play the video on that site and our addon will catch the video stream"
+           popover-trigger="mouseenter">
+        <label for="source"
+               class="col-sm-2 control-label">Source</label>
+
+        <div class="col-sm-10">
+          <input type="url" ng-model="video.source"
+                 class="form-control" id="source" placeholder="Source">
+        </div>
+      </div>
+      <div class="form-group"
+           popover="Enter the absolute url of the video file. Addon will fill this automatically."
+           popover-trigger="mouseenter">
+        <label for="path" class="col-sm-2 control-label">Absolute Path</label>
+
+        <div class="col-sm-10">
+          <input type="url" ng-model="video.url"
+                 class="form-control" id="path" placeholder="Path">
+        </div>
+      </div>
+      <div class="form-group"
+           popover="This is the suffix used to change the position of the video in the server. Leave as it is if you are not sure."
+           popover-trigger="mouseenter"
+        >
+        <label for="suffix" class="col-sm-2 control-label">Suffix</label>
+
+        <div class="col-sm-10">
+          <input type="text" ng-model="video.suffix"
+                 class="form-control" id="suffix" placeholder="start">
+        </div>
+      </div>
+      <div class="form-group"
+           popover="This will refresh the video and will start buffering from the beginning."
+           popover-trigger="mouseenter"
+           popover-placement="bottom">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" ng-click="updateVideo()"
+                  class="btn btn-primary btn-lg btn-block">Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </tab>
+  <tab heading="Subtitle">
+    <h2>Subtitle Options</h2>
+
+    <form class="form-horizontal">
+      <div class="form-group"
+           popover="Copy Paste the raw subtitles from a file"
+           popover-trigger="mouseenter">
+        <label for="subtitle.text"
+               class="col-sm-2 control-label">Raw Subtitles</label>
+
+        <div class="col-sm-10">
+          <textarea id="subtitle.text" class="form-control" rows="10"
+                    class="form-control"
+                    ng-model="subtitle.text"></textarea>
+        </div>
+      </div>
+      <div class="form-group"
+           popover="Open a suitable subtitles file"
+           popover-trigger="mouseenter">
+        <label for="subtitle.file" class="col-sm-2 control-label">File</label>
+
+        <div class="col-sm-10">
+          <input type="file" fileread="subtitle.text"
+                 class="form-control" id="subtitle.file" placeholder="Path">
+        </div>
+      </div>
+      <div class="form-group"
+           popover="Add subtitles to the video"
+           popover-trigger="mouseenter"
+           popover-placement="bottom">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button ng-click="addSubtitlesFromText()"
+                  class="btn btn-primary btn-lg btn-block">Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </tab>
+  <tab heading="Shifting">
+    <h2>Subtitle Shifting Options</h2>
+  </tab>
+  <tab heading="Sycning">
+    <h2>Syncing Options</h2>
+
+    <p>Now you can watch videos with your friends. Share the collaboration ID and the videos will be synced.</p>
+
+    <div class="alert alert-info">Both needs to load the video separately and then share the collaboration ID to sync
+      the videos.
+    </div>
+    <form class="form-horizontal">
+      <div class="form-group"
+           popover="Share this with a friend and watch movies together."
+           popover-trigger="mouseenter">
+        <label for="collaborationsID"
+               class="col-sm-2 control-label" ng-model="share.id">Collaboration ID</label>
+
+        <div class="col-sm-10">
+          <input type="text" ng-model="collaborationsID"
+                 class="form-control" id="collaborationsID" placeholder="Collaboration ID">
+        </div>
+      </div>
+      <div class="form-group"
+           popover="Setup collaboration with the given ID"
+           popover-trigger="mouseenter"
+           popover-placement="bottom">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button ng-click="collaborate()"
+                  class="btn btn-primary btn-lg btn-block">Collaborate
+          </button>
+          <button ng-click="sync()"
+                  class="btn btn-primary btn-lg btn-block">Sync
+          </button>
+        </div>
+      </div>
+    </form>
+  </tab>
+  <tab heading="Player">
+    <h2>Player Options</h2>
+    <form class="form-horizontal">
+      <h3>Video</h3>
+      <div class="form-group"
+           popover="Scaling of the video"
+           popover-trigger="mouseenter">
+        <label for="scaling"
+               class="col-sm-2 control-label">Scaling</label>
+
+        <div class="col-sm-10">
+          <select class="form-control" ng-model="flow.clip.autoBuffering" id="scaling">
+            <option value="fit">Fit</option>
+            <option value="half">Half</option>
+            <option value="orig">Original</option>
+            <option value="scale">Scale</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"
+           popover="If enabled, video will start buffering when page loads"
+           popover-trigger="mouseenter">
+        <label for="autobuffer"
+               class="col-sm-2 control-label">Auto Buffering</label>
+
+        <div class="col-sm-10">
+          <label>
+            <input type="checkbox" id="autobuffer"
+                   ng-model="flow.clip.scaling"> Buffer video when page loads
+          </label>
+        </div>
+      </div>
+      <div class="form-group"
+           popover="If enabled, video will start playing when page loads"
+           popover-trigger="mouseenter">
+        <label for="autoplay"
+               class="col-sm-2 control-label">Auto Playing</label>
+
+        <div class="col-sm-10">
+          <label>
+            <input type="checkbox"
+                 ng-model="flow.clip.autoBuffering"
+                 id="autoplay">
+            Play video when page loads
+          </label>
+        </div>
+      </div>
+      <hr/>
+      <h3>Subtitles</h3>
+      <div class="form-group"
+           popover="Font size of the caption"
+           popover-trigger="mouseenter">
+        <label for="fontSize"
+               class="col-sm-2 control-label">Font size</label>
+
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input type="text" ng-model="flow.plugins.content.style.body.fontSize"
+                   class="form-control" id="fontSize" placeholder="20">
+            <div class="input-group-addon">px</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group"
+           popover="Font colour of the caption"
+           popover-trigger="mouseenter">
+        <label for="fontColour"
+               class="col-sm-2 control-label">Font Colour</label>
+
+        <div class="col-sm-10">
+          <div class="input-group">
+            <div class="input-group-addon">#</div>
+            <input type="text" ng-model="flow.plugins.content.style.body.color"
+                   class="form-control" id="fontColour" placeholder="ffffff">
+          </div>
+        </div>
+      </div>
+      <div class="form-group"
+           popover="How far the subtitles line from the bottom of the screen"
+           popover-trigger="mouseenter">
+        <label for="subBottom"
+               class="col-sm-2 control-label">Subtitle Bottom:</label>
+
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input type="text" ng-model="flow.plugins.content.bottom"
+                 class="form-control" id="subBottom" placeholder="ffffff">
+            <div class="input-group-addon">px</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group"
+           popover="Height of the subtitle line"
+           popover-trigger="mouseenter">
+        <label for="subHeight"
+               class="col-sm-2 control-label">Subtitle Height:</label>
+
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input type="text" ng-model="flow.plugins.content.bottom"
+                   class="form-control" id="subHeight" placeholder="ffffff">
+            <div class="input-group-addon">px</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </tab>
+</tabset>
+
+<!--<h2>Debug</h2>-->
+<!--<code>{{video | json}}</code>-->
+<!--<code>{{subtitle | json}}</code>-->
