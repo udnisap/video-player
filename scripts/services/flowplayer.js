@@ -63,7 +63,7 @@ angular.module('vspApp')
         options = _.extend(options, ops);
         localStorageService.set('player',options);
         $log.debug('Player initialized with ', options);
-        player =  flowplayer(playerID, '/swf/flowplayer-3.2.15.swf', options)
+        player =  flowplayer(playerID, 'swf/flowplayer-3.2.15.swf', options)
       }
 
       api.getSubtitles = function(){
